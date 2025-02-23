@@ -9,6 +9,7 @@ from src.exception import CustomException
 from src.logger import logging
 
 from src.components.data_transformation import DataTransformation, DataTransformationConfig
+from src.components.model_trainer import ModelTrainer, ModelTrainerConfig
 
 
 @dataclass
@@ -55,3 +56,7 @@ if __name__ == '__main__':
     obj1 = DataTransformation()
     train_arr, test_arr,_ = obj1.initiate_data_transformation(train_path, test_path)
     logging.info('Data Transformation Completed and saved preprocessor object')
+
+    modeltrainer=ModelTrainer()
+    print(f'accuracy : {modeltrainer.initiate_model_trainer(train_arr,test_arr)}')
+
