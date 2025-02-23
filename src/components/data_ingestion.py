@@ -8,6 +8,9 @@ from dataclasses import dataclass
 from src.exception import CustomException
 from src.logger import logging
 
+from src.components.data_transformation import DataTransformation, DataTransformationConfig
+
+
 @dataclass
 class DataIngestionConfig():
     train_data_path = os.path.join('artifacts','train.csv')
@@ -18,7 +21,7 @@ class DataIngestionConfig():
 class DataIngestion():
     def __init__(self):
         self.ingestion_config = DataIngestionConfig()
-        
+
     def initiate_data_ingestion(self):
         try:
             logging.info('Data Ingestion Started')
@@ -43,5 +46,12 @@ class DataIngestion():
             raise CustomException(e,sys)
 
 if __name__ == '__main__':
-    data_ingestion = DataIngestion()
-    data_ingestion.initiate_data_ingestion()
+
+    obj = DataIngestion()
+    train_path, test_path = obj.initiate_data_ingestion()
+    # print(train_path, test_path)
+    logging.info('Data Ingestion Completed and saved artifacts')
+
+    obj1 = DataTransformation()
+    train_arr, test_arr,_ = obj1.initiate_data_transformation(train_path, test_path)
+    logging.info('Data Transformation Completed and saved preprocessor object')
