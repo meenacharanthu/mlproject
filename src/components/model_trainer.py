@@ -13,7 +13,7 @@ from sklearn.linear_model import LinearRegression, Ridge, Lasso
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.ensemble import RandomForestRegressor, AdaBoostRegressor, GradientBoostingRegressor
 # from catboost import CatBoostRegressor
-from xgboost import XGBRegressor
+# from xgboost import XGBRegressor
 from sklearn.svm import SVR
 
 from src.utils import save_obj, evaluate_models
@@ -43,7 +43,7 @@ class ModelTrainer:
                 "Random Forest": RandomForestRegressor(),
                 "Decision Tree": DecisionTreeRegressor(),
                 "Linear Regression": LinearRegression(),
-                "XGBRegressor": XGBRegressor(),
+                # "XGBRegressor": XGBRegressor(),
                 # "CatBoosting Regressor": CatBoostRegressor(verbose=False),
                 "AdaBoost Regressor": AdaBoostRegressor(),
             }
@@ -59,10 +59,10 @@ class ModelTrainer:
                     'n_estimators': [8, 16, 32, 64, 128, 256]
                 },
                 "Linear Regression": {},
-                "XGBRegressor": {
-                    'learning_rate': [.1, .01, .05, .001],
-                    'n_estimators': [8, 16, 32, 64, 128, 256]
-                },
+                # "XGBRegressor": {
+                #     'learning_rate': [.1, .01, .05, .001],
+                #     'n_estimators': [8, 16, 32, 64, 128, 256]
+                # },
                 # "CatBoosting Regressor": {
                 #     'depth': [6, 8, 10],
                 #     'learning_rate': [0.01, 0.05, 0.1],
