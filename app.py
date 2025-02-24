@@ -2,13 +2,12 @@ from flask import Flask, render_template, request
 import pandas as pd
 import numpy as np
 import os
-import logging
+
 
 from sklearn.preprocessing import StandardScaler
 
 app = Flask(__name__)
 
-logging.basicConfig(level=logging.DEBUG)
 
 @app.route('/')
 def welcome():
@@ -40,22 +39,16 @@ def predict():
                 writing_score=writing_score
             )
 
-            # Convert sample data to DataFrame
             input_df = sample_data.get_data_as_df()
-            logging.debug("Input DataFrame:")
-            logging.debug(input_df)
 
             # Initialize Predict_pipeline
             pipeline = Predict_pipeline()
-
-            # Make prediction
             prediction = pipeline.predict(input_df)
-            logging.debug(f"Prediction: {prediction}")
-        
 
             return render_template('home.html', prediction=prediction[0])
+
         except Exception as e:
-            logging.error(f"Error in predict route: {e}")
+            
             return render_template('home.html', error=str(e))
     else:
         return render_template('home.html')
