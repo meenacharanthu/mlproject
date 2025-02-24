@@ -46,9 +46,20 @@ def evaluate_models(X_train, y_train,X_test,y_test,models,param):
 
             test_model_score = r2_score(y_test, y_test_pred)
 
-            report[list(models.keys())[i]] = test_model_score
+            # report[list(models.keys())[i]] = test_model_score
+            report[model_name] = {
+                'test_score': test_model_score,
+                'best_params': gs.best_params_
+            }
 
         return report
 
     except Exception as e:
         raise CustomException(e, sys)
+
+def load_obj(file_path):
+    try:
+        with open(file_path,mode='rb') as file:
+            return pickle.load(file)
+    except Exception as e:
+        CustomException(e, sys)

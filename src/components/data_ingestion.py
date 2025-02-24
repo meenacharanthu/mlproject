@@ -46,17 +46,17 @@ class DataIngestion():
             logging.error(f'Error in Data Ingestion: {str(e)}')
             raise CustomException(e,sys)
 
-if __name__ == '__main__':
+# if __name__ == '__main__':
 
-    obj = DataIngestion()
-    train_path, test_path = obj.initiate_data_ingestion()
-    # print(train_path, test_path)
-    logging.info('Data Ingestion Completed and saved artifacts')
+#     obj = DataIngestion()
+#     train_path, test_path = obj.initiate_data_ingestion()
+#     # print(train_path, test_path)
+#     logging.info('Data Ingestion Completed and saved artifacts')
 
-    obj1 = DataTransformation()
-    train_arr, test_arr,_ = obj1.initiate_data_transformation(train_path, test_path)
-    logging.info('Data Transformation Completed and saved preprocessor object')
+#     obj1 = DataTransformation()
+#     train_arr, test_arr,_ = obj1.initiate_data_transformation(train_path, test_path)
+#     logging.info('Data Transformation Completed and saved preprocessor object')
 
-    modeltrainer=ModelTrainer()
-    print(f'accuracy : {modeltrainer.initiate_model_trainer(train_arr,test_arr)}')
+#     modeltrainer=ModelTrainer()
+#     print(f'accuracy : {modeltrainer.initiate_model_trainer(train_arr,test_arr)}')
 

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to My Project</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-5">Welcome to My Machine Learning Project</h1>
+        <p class="lead">This project is designed to predict student performance based on various factors such as gender, race/ethnicity, parental level of education, lunch type, test preparation course, and scores in reading and writing.</p>
+        
+        <h2>Project Details</h2>
+        <p>This project utilizes a machine learning pipeline to preprocess the input data, train multiple regression models, and select the best model based on performance metrics. The model is then used to make predictions on new data.</p>
+        
+        <h3>Key Features</h3>
+        <ul>
+            <li>Data Preprocessing: Handles missing values, encodes categorical variables, and scales numerical features.</li>
+            <li>Model Training: Trains multiple regression models including Random Forest, Decision Tree, Linear Regression, XGBoost, CatBoost, and AdaBoost.</li>
+            <li>Model Selection: Uses GridSearchCV to find the best hyperparameters and selects the best model based on R2 score.</li>
+            <li>Prediction: Provides predictions based on the trained model for new input data.</li>
+        </ul>
+        
+        <h3>Technologies Used</h3>
+        <ul>
+            <li>Python</li>
+            <li>Flask</li>
+            <li>Pandas</li>
+            <li>NumPy</li>
+            <li>Scikit-learn</li>
+            <li>XGBoost</li>
+            <li>CatBoost</li>
+            <li>Bootstrap</li>
+        </ul>
+        
+        <a href="/predict" class="btn btn-primary mt-3">Go to Prediction Page</a>
+    </div>
+</body>
+</html>

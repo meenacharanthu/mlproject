@@ -54,7 +54,7 @@ class DataTransformation:
 
             logging.info('train and test data loaded')
 
-            target_col = 'math score'
+            target_col = 'math_score'
             input_feature_train_df = train_df.drop(target_col, axis=1)
             target_train_df = train_df[target_col]
 

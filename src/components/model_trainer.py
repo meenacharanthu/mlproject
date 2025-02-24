@@ -20,97 +20,90 @@ from src.utils import save_obj, evaluate_models
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import r2_score
 
+
+
+
 @dataclass
-class ModelTrainerConfig():
-    model_path = os.path.join('artifacts','model.pkl')
-    
-class ModelTrainer():
+class ModelTrainerConfig:
+    model_path: str = os.path.join('artifacts', 'model.pkl')
+
+class ModelTrainer:
     def __init__(self):
         self.model_trainer_config = ModelTrainerConfig()
 
     def initiate_model_trainer(self, train_arr, test_arr):
-
         try:
             logging.info('Model Training Started')
-            X_train = train_arr[:,:-1]
-            y_train = train_arr[:,-1]
-            X_test = test_arr[:,:-1]
-            y_test = test_arr[:,-1]
-
-        
+            X_train = train_arr[:, :-1]
+            y_train = train_arr[:, -1]
+            X_test = test_arr[:, :-1]
+            y_test = test_arr[:, -1]
 
             models = {
                 "Random Forest": RandomForestRegressor(),
                 "Decision Tree": DecisionTreeRegressor(),
-                "Gradient Boosting": GradientBoostingRegressor(),
                 "Linear Regression": LinearRegression(),
                 "XGBRegressor": XGBRegressor(),
                 "CatBoosting Regressor": CatBoostRegressor(verbose=False),
                 "AdaBoost Regressor": AdaBoostRegressor(),
             }
-            params={
+            params = {
                 "Decision Tree": {
-                    'criterion':['squared_error', 'friedman_mse', 'absolute_error', 'poisson'],
-                    'splitter':['best','random'],
-                    'max_features':['sqrt','log2'],
+                    'criterion': ['squared_error', 'friedman_mse', 'absolute_error', 'poisson'],
+                    'splitter': ['best', 'random'],
+                    'max_features': ['sqrt', 'log2'],
                 },
-                "Random Forest":{
-                    'criterion':['squared_error', 'friedman_mse', 'absolute_error', 'poisson'],
-                 
-                    'max_features':['sqrt','log2',None],
-                    'n_estimators': [8,16,32,64,128,256]
+                "Random Forest": {
+                    'criterion': ['squared_error', 'friedman_mse', 'absolute_error', 'poisson'],
+                    'max_features': ['sqrt', 'log2', None],
+                    'n_estimators': [8, 16, 32, 64, 128, 256]
                 },
-                "Gradient Boosting":{
-                    'loss':['squared_error', 'huber', 'absolute_error', 'quantile'],
-                    'learning_rate':[.1,.01,.05,.001],
-                    # 'subsample':[0.6,0.7,0.75,0.8,0.85,0.9],
-                    'criterion':['squared_error', 'friedman_mse'],
-                    # 'max_features':['auto','sqrt','log2'],
-                    'n_estimators': [8,16,32,64,128,256]
+                "Linear Regression": {},
+                "XGBRegressor": {
+                    'learning_rate': [.1, .01, .05, .001],
+                    'n_estimators': [8, 16, 32, 64, 128, 256]
                 },
-                "Linear Regression":{},
-                "XGBRegressor":{
-                    'learning_rate':[.1,.01,.05,.001],
-                    'n_estimators': [8,16,32,64,128,256]
-                },
-                "CatBoosting Regressor":{
-                    'depth': [6,8,10],
+                "CatBoosting Regressor": {
+                    'depth': [6, 8, 10],
                     'learning_rate': [0.01, 0.05, 0.1],
                     'iterations': [30, 50, 100]
                 },
-                "AdaBoost Regressor":{
-                    'learning_rate':[.1,.01,0.5,.001],
-                    'loss':['linear','square','exponential'],
-                    'n_estimators': [8,16,32,64,128,256]
+                "AdaBoost Regressor": {
+                    'learning_rate': [.1, .01, 0.5, .001],
+                    'loss': ['linear', 'square', 'exponential'],
+                    'n_estimators': [8, 16, 32, 64, 128, 256]
                 }
-                
             }
 
-            model_report =evaluate_models(X_train=X_train,y_train=y_train,X_test=X_test,y_test=y_test,
-                                             models=models,param=params)
+            model_report = evaluate_models(X_train=X_train, y_train=y_train, X_test=X_test, y_test=y_test,
+                                           models=models, param=params)
 
-            best_model_score = max(sorted(model_report.values()))
-            logging.info(f'best model score : {best_model_score}')
 
-            best_model_name = list(model_report.keys())[list(model_report.values()).index(best_model_score)]
+            best_model_score = max([report['test_score'] for report in model_report.values()])
+            logging.info(f'Best model score: {best_model_score}')
+
+            best_model_name = [name for name, report in model_report.items() if report['test_score'] == best_model_score][0]
 
             if best_model_score < 0.6:
                 raise CustomException('No best model found')
 
-            loggng.info(f'best model found for {best_model_name} with score : {best_model_score}')
+            logging.info(f'Best model found: {best_model_name} with score: {best_model_score}')
 
             best_model = models[best_model_name]
+            best_params = model_report[best_model_name]['best_params']
+            best_model.set_params(**best_params)
+            best_model.fit(X_train, y_train)
             predicted = best_model.predict(X_test)
 
             save_obj(
-                obj = best_model,
-                file_path= self.model_trainer_config.model_path
+                obj=best_model,
+                file_path=self.model_trainer_config.model_path
             )
 
             r2_square = r2_score(y_test, predicted)
+            logging.info(f'R2 Score: {r2_square}')
             return r2_square
 
         except Exception as e:
-            CustomException(e,sys)
-
-
+            logging.error(f"Error in initiate_model_trainer method: {e}")
+            raise CustomException(e, sys)
